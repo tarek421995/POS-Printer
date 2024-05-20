@@ -1,12 +1,11 @@
-﻿asgiref
-Django
-pillow
-psycopg2-binary
-pyserial
-pyusb
-pywin32==303; platform_system=="Windows"
-sqlparse
-typing_extensions
-tzdata
-WMI
-win32print
+asgiref==3.7.2
+Django==5.0.2
+pillow==10.3.0
+psycopg2-binary==2.9.6
+pyserial==3.5
+pyusb==1.2.1
+pywin32==306
+sqlparse==0.4.4
+typing_extensions==4.9.0
+tzdata==2023.4
+WMI==1.5.1
