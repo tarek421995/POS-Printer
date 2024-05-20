@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sequence Number</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Optional Bootstrap JavaScript bundle (includes jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>\
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        .btn-pos {
+            background-color: orange;
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.5rem; /* Larger font size for touch screens */
+            margin: 10px 0; /* Margin for spacing */
+        }
+        .btn-pos:hover {
+            background-color: darkorange;
+        }
+        .input-pos {
+            font-size: 1.5rem; /* Larger font size for touch screens */
+            padding: 10px;
+        } 
+    
+        .logo-corner {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .container {
+            max-width: 800px; /* Adjust the width of container for POS system */
+        }
+    </style>
+    
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+                var numberToPrint = $('#number_to_print').val();
+                var reset = $('button[name="reset"]').is(':focus');
+                var postData = {'csrfmiddlewaretoken': '{{ csrf_token }}'};
+
+                if (reset) {
+                    postData['reset'] = true;
+                } else {
+                    postData['number_to_print'] = numberToPrint;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'pos:sequence_view' %}",
+                    data: postData,
+                    success: function(response) {
+                        // Handle successful response
+                        if (response.status === "success" || response.status === "Sequence reset") {
+                            // Update the number displayed on the page
+                            $('#number').text(response.number);
+
+                            // Optionally, display a success message
+                            // alert("Success: " + response.message);
+
+                            // Reset the form if the operation was a reset
+                            if (reset) {
+                                $('form')[0].reset();
+                            }
+                        } else if (response.status === "error") {
+                            // Display the error message if there was an error
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert('An error occurred.');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="logo-corner">
+        <!-- Replace with your actual logo image -->
+        <img src="#" alt="Logo" height="60"> <!-- Increased logo size -->
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-3">Sequence Number: <span id="number">{{ number }}</span></h1>
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control input-pos" id="number_to_print" name="number_to_print" placeholder="Enter/Set a number to print">
+            </div>
+            <button type="submit" name="print_next" class="btn btn-pos btn-block">Print Next Number</button>
+            <button type="submit" name="reset" class="btn btn-pos btn-block">Reset</button>
+        </form>
+        <a href="{% url 'pos:list_usb_devices' %}" >select you device if not running</a>
+    </div>
+</body>
+</html>

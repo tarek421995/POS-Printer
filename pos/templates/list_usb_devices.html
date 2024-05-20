@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List USB Devices</title>
+</head>
+<body>
+    <h1>Select Default Printer</h1>
+    {% if error %}
+        <p style="color: red;">Error: {{ error }}</p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <ul>
+            {% for device in devices %}
+                <li>
+                    <label>
+                        <input type="radio" name="default_printer" value="{{ device.device_name }}">
+                        {{ device.device_name }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Set as Default Printer</button>
+    </form>
+</body>
+</html>

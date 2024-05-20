@@ -1,0 +1,15 @@
+version: '3.10'
+
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=printer.settings
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    privileged: true
