@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       max-parallel: 4
       matrix:
@@ -25,6 +25,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Install Windows Dependencies
+      run: |
+        choco install usbutils
+        choco install libusb-1.0-0-dev
     - name: Run Tests
       run: |
         python manage.py test
