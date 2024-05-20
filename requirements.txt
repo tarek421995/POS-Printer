@@ -4,7 +4,7 @@ pillow
 psycopg2-binary
 pyserial
 pyusb
-pywin32
+pywin32==303; platform_system=="Windows"
 sqlparse
 typing_extensions
 tzdata
